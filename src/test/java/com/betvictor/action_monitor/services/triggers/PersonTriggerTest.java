@@ -6,13 +6,13 @@ import com.betvictor.action_monitor.configs.MockedTableChangeMessageProducerConf
 import com.betvictor.action_monitor.domain.Person;
 import com.betvictor.action_monitor.services.PersonService;
 import com.betvictor.action_monitor.services.jms.TableChangeMessageProducer;
-import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
 
 @Import({MockedTableChangeMessageProducerConfig.class})
@@ -22,12 +22,18 @@ public class PersonTriggerTest extends AbstractTest {
     private PersonService personService;
 
     @Autowired
-    private TableChangeMessageProducer tableChangeMessageProducer;
+    private TableChangeMessageProducer messageProducer;
+
+    @Before
+    public void setup(){
+        Assert.assertNotNull(personService);
+        Assert.assertNotNull(messageProducer);
+    }
 
     @Test
     public void testAfterInsertTrigger() {
         personService.addPerson(new Person("Peter"));
-        verify(tableChangeMessageProducer, times(1));
+        verify(messageProducer, times(1));
     }
 
     @Test
@@ -36,14 +42,14 @@ public class PersonTriggerTest extends AbstractTest {
         p.setName("Andras");
 
         personService.updatePerson(p);
-        verify(tableChangeMessageProducer, times(2));
+        verify(messageProducer, times(2));
     }
 
     @Test
     public void testAfterDeleteTrigger() {
         Person p=personService.addPerson(new Person("Peter"));
         personService.deletePerson(p);
-        verify(tableChangeMessageProducer, times(2));
+        verify(messageProducer, times(2));
     }
     @Test
     public void testAfterDeleteTrigger_deleteAll() {
@@ -51,6 +57,6 @@ public class PersonTriggerTest extends AbstractTest {
         personService.addPerson(new Person("Andras"));
         personService.addPerson(new Person("Akos"));
         personService.deleteAll();
-        verify(tableChangeMessageProducer, times(6));
+        verify(messageProducer, times(6));
     }
 }

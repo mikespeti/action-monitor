@@ -27,9 +27,11 @@ public class RestControllerTest extends AbstractTest {
 
     private MockMvc mockMvc;
 
+
     @Before
     public void setup() {
         Assert.assertNotNull(wac);
+        Assert.assertNotNull(personService);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 

@@ -1,4 +1,4 @@
-package com.betvictor.action_monitor.services.triggers;
+package com.betvictor.action_monitor.services.triggers.h2;
 
 import com.betvictor.action_monitor.database.SpringContext;
 import com.betvictor.action_monitor.domain.Person;
@@ -9,8 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PersonAfterDeleteTrigger extends AbstractEntityTriggerAdapter {
-
+public class PersonAfterUpdateTrigger extends AbstractEntityTriggerAdapter {
     @Override
     public Class<?> getEntityClass() {
         return Person.class;
@@ -20,14 +19,14 @@ public class PersonAfterDeleteTrigger extends AbstractEntityTriggerAdapter {
     public void fire(Connection conn, ResultSet oldRow, ResultSet newRow) throws SQLException {
         TableChangeMessageProducer messageProducer = SpringContext.getApplicationContext().getBean(TableChangeMessageProducer.class);
 
-        if (oldRow == null) {
-            throw new SQLException("oldRow result set was NULL at DELETE action");
+        if (newRow == null) {
+            throw new SQLException("newRow result set was NULL at UPDATE action");
         }
 
         messageProducer.sendMessage(ImmutableMap.<String, Object>builder()
                 .put("timestamp", System.nanoTime())
-                .put("action", TableChangeMessageProducer.DB_ACTIONS.INSERT)
-                .put("id", oldRow.getString("ID"))
+                .put("action", TableChangeMessageProducer.DB_ACTIONS.UPDATE)
+                .put("id", newRow.getString("ID"))
                 .put("table", getTableName())
                 .build()
         );

@@ -1,4 +1,4 @@
-package com.betvictor.action_monitor.services.triggers;
+package com.betvictor.action_monitor.services.triggers.h2;
 
 import com.betvictor.action_monitor.domain.Person;
 import org.apache.commons.lang3.StringUtils;
@@ -6,9 +6,6 @@ import org.h2.tools.TriggerAdapter;
 
 import javax.persistence.Entity;
 
-/**
- * Created by mikes on 2016. 04. 16..
- */
 public abstract class AbstractEntityTriggerAdapter extends TriggerAdapter {
 
     private final String tableName;
