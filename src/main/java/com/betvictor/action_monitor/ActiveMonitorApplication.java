@@ -18,11 +18,6 @@ import org.springframework.jms.annotation.EnableJms;
 @EnableJms
 public class ActiveMonitorApplication {
 
-    /*@RequestMapping("/")
-    String home() {
-        return "Hello World!";
-    }*/
-
     public static void main(String[] args) throws Exception {
         SpringApplication.run(ActiveMonitorApplication.class, args);
     }
