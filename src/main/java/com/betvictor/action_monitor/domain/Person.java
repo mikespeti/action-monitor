@@ -1,19 +1,22 @@
 package com.betvictor.action_monitor.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "T_PERSON")
 public class Person {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
     @Column(name = "NAME")
     private String name;
 
     public Person() {
+    }
+
+    public Person(String name) {
+        this.name = name;
     }
 
     public Long getId() {

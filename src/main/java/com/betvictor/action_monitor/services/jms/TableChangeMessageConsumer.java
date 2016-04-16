@@ -23,6 +23,7 @@ public class TableChangeMessageConsumer {
      */
     @JmsListener(destination = QUEUE_NAME)
     public void receiveQueue(String text) {
+        logger.info("Sending message to websocket: "+text);
         // Pushes the formatted string to the websocket channel for the connected clients
         template.convertAndSend("/active-monitor/updates", text);
     }

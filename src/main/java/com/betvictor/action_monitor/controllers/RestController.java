@@ -12,7 +12,7 @@ public class RestController {
     @Autowired
     private PersonService personService;
 
-    @RequestMapping("/healtCheck")
+    @RequestMapping("/healthCheck")
     public String healtCheck(){
         return "OK";
     }
