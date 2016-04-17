@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
@@ -33,6 +34,6 @@ public class TableChangeMessageProducerTest extends AbstractTest {
         messageProducer.sendMessage(new TableChangeMessage("xx123", System.nanoTime(), "testTable", TableChangeMessageProducer.DB_ACTIONS.UPDATE));
         messageProducer.sendMessage(new TableChangeMessage("xx123", System.nanoTime(), "testTable", TableChangeMessageProducer.DB_ACTIONS.DELETE));
 
-        verify(messageConsumer, times(3));
+        verify(messageConsumer, times(3)).receiveQueue(Mockito.anyString());
     }
 }

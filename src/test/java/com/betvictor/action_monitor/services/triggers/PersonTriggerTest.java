@@ -5,6 +5,7 @@ import com.betvictor.action_monitor.AbstractTest;
 import com.betvictor.action_monitor.configs.MockedTableChangeMessageProducerConfig;
 import com.betvictor.action_monitor.domain.Person;
 import com.betvictor.action_monitor.services.PersonService;
+import com.betvictor.action_monitor.services.jms.TableChangeMessage;
 import com.betvictor.action_monitor.services.jms.TableChangeMessageProducer;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,7 +13,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
 
 @Import({MockedTableChangeMessageProducerConfig.class})
@@ -33,7 +36,7 @@ public class PersonTriggerTest extends AbstractTest {
     @Test
     public void testAfterInsertTrigger() {
         personService.add(new Person("Peter"));
-        verify(messageProducer, times(1));
+        verify(messageProducer, times(1)).sendMessage(any(TableChangeMessage.class));
     }
 
     @Test
@@ -42,14 +45,15 @@ public class PersonTriggerTest extends AbstractTest {
         p.setName("Andras");
 
         personService.update(p);
-        verify(messageProducer, times(2));
+        verify(messageProducer, times(2)).sendMessage(any(TableChangeMessage.class));
+
     }
 
     @Test
     public void testAfterDeleteTrigger() {
         Person p=personService.add(new Person("Peter"));
         personService.delete(p);
-        verify(messageProducer, times(2));
+        verify(messageProducer, times(2)).sendMessage(any(TableChangeMessage.class));
     }
     @Test
     public void testAfterDeleteTrigger_deleteAll() {
@@ -57,6 +61,6 @@ public class PersonTriggerTest extends AbstractTest {
         personService.add(new Person("Andras"));
         personService.add(new Person("Akos"));
         personService.deleteAll();
-        verify(messageProducer, times(6));
+        verify(messageProducer, times(6)).sendMessage(any(TableChangeMessage.class));
     }
 }
