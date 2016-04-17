@@ -16,23 +16,28 @@
     $(document).ready(function () {
         var messageList = $("#messages");
         var getMessageString = function (message) {
-            return "<p>"+message + "</p>";
+            return "<p>" +
+                    "timestamp=" + message.timestamp +
+                    " :: a row with " +
+                    "ID=" + message.id +
+                    " was " + message.action +
+                    " at " + message.tableName + "</p>";
         };
         // Callback function to be called when stomp client could not connect to server
-        var errorCallback = function(error) {
+        var errorCallback = function (error) {
             $("#connectionState").append(error);
         };
         var socket = new SockJS('/active-monitor/connect');
         var stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
-            if(frame.command === 'CONNECTED'){
+            if (frame.command === 'CONNECTED') {
                 $("#connectionState").append("websocket connection established<br/>");
             }
             // subscribe to the /topic/entries endpoint which feeds newly added messages
             stompClient.subscribe('/active-monitor/updates', function (data) {
                 // when a message is received add it to the end of the list
                 var message = data.body;
-                messageList.append(getMessageString(message));
+                messageList.append(getMessageString(JSON.parse(message)));
             });
         }, errorCallback);
     });

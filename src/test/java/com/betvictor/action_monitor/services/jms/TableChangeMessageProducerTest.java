@@ -29,27 +29,9 @@ public class TableChangeMessageProducerTest extends AbstractTest {
 
     @Test
     public void testSendMessage() {
-        messageProducer.sendMessage(ImmutableMap.<String, Object>builder()
-                .put("timestamp", System.nanoTime())
-                .put("action", TableChangeMessageProducer.DB_ACTIONS.INSERT)
-                .put("id", "xx123")
-                .put("table", "testTable")
-                .build()
-        );
-        messageProducer.sendMessage(ImmutableMap.<String, Object>builder()
-                .put("timestamp", System.nanoTime())
-                .put("action", TableChangeMessageProducer.DB_ACTIONS.UPDATE)
-                .put("id", "xx123")
-                .put("table", "testTable")
-                .build()
-        );
-        messageProducer.sendMessage(ImmutableMap.<String, Object>builder()
-                .put("timestamp", System.nanoTime())
-                .put("action", TableChangeMessageProducer.DB_ACTIONS.DELETE)
-                .put("id", "xx123")
-                .put("table", "testTable")
-                .build()
-        );
+        messageProducer.sendMessage(new TableChangeMessage("xx123", System.nanoTime(), "testTable", TableChangeMessageProducer.DB_ACTIONS.INSERT));
+        messageProducer.sendMessage(new TableChangeMessage("xx123", System.nanoTime(), "testTable", TableChangeMessageProducer.DB_ACTIONS.UPDATE));
+        messageProducer.sendMessage(new TableChangeMessage("xx123", System.nanoTime(), "testTable", TableChangeMessageProducer.DB_ACTIONS.DELETE));
 
         verify(messageConsumer, times(3));
     }

@@ -1,13 +1,17 @@
 package com.betvictor.action_monitor.services.jms;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import static com.betvictor.action_monitor.services.jms.TableChangeMessageConsumer.QUEUE_NAME;
 
 @Component
 public class TableChangeMessageProducer {
+    static final Logger logger = LoggerFactory.getLogger(TableChangeMessageProducer.class);
 
     public enum DB_ACTIONS {
         INSERT {
@@ -30,24 +34,26 @@ public class TableChangeMessageProducer {
         }
     }
 
+    public TableChangeMessageProducer() {
+        jsonConverter = new ObjectMapper();
+    }
+
     @Autowired
     private JmsTemplate jmsTemplate;
 
+
+    private ObjectMapper jsonConverter;
+
     /**
      * Generic method to add message to the ActiveMQ queue
-     *
-     * @param nvMap - contains properties from the status message<br/>
-     * <b>Required parameters: </b><br/>
-     *              [name - type],
-     *              [timestamp - String],
-     *              [id - String],
-     *              [table - String],
-     *              [action - TableChangeMessageProducer.DB_ACTIONS]<br/>
      */
-    public void sendMessage(Map<String, Object> nvMap) {
-        jmsTemplate.convertAndSend(TableChangeMessageConsumer.QUEUE_NAME,
-                "timestamp=" + nvMap.get("timestamp") + " :: a row with ID=" + nvMap.get("id") + " " + nvMap.get("action") + " " + nvMap.get("table"));
+    public void sendMessage(TableChangeMessage changeMessage) {
+
+        try {
+            jmsTemplate.convertAndSend(QUEUE_NAME, jsonConverter.writeValueAsString(changeMessage));
+        } catch (Exception e) {
+            logger.error("Can't send message to queue=[" + QUEUE_NAME + "], because jmsTempalte was not autowired");
+        }
+
     }
-
-
 }

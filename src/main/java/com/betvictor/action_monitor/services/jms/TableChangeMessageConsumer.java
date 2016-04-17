@@ -19,13 +19,14 @@ public class TableChangeMessageConsumer {
 
     /**
      * Listener method to an ActiveMQ queue, which will contain the table changes (insert/update/delete)
-     * @param text - the message what will be send out tot he websocket channel
+     * @param jsonMessage - the message what will be send out tot he websocket channel
      */
     @JmsListener(destination = QUEUE_NAME)
-    public void receiveQueue(String text) {
-        logger.info("Sending message to websocket: "+text);
+    public void receiveQueue(String jsonMessage) {
+        logger.debug("Sending message to websocket: "+jsonMessage);
+
         // Pushes the formatted string to the websocket channel for the connected clients
-        template.convertAndSend("/active-monitor/updates", text);
+        template.convertAndSend("/active-monitor/updates", jsonMessage);
     }
 
 }

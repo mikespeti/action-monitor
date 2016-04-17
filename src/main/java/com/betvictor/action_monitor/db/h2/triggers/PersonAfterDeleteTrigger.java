@@ -1,5 +1,6 @@
 package com.betvictor.action_monitor.db.h2.triggers;
 
+import com.betvictor.action_monitor.services.jms.TableChangeMessage;
 import com.betvictor.action_monitor.utils.SpringContext;
 import com.betvictor.action_monitor.domain.Person;
 import com.betvictor.action_monitor.services.jms.TableChangeMessageProducer;
@@ -24,12 +25,6 @@ public class PersonAfterDeleteTrigger extends AbstractEntityTriggerAdapter {
             throw new SQLException("oldRow result set was NULL at DELETE action");
         }
 
-        messageProducer.sendMessage(ImmutableMap.<String, Object>builder()
-                .put("timestamp", System.nanoTime())
-                .put("action", TableChangeMessageProducer.DB_ACTIONS.INSERT)
-                .put("id", oldRow.getString("ID"))
-                .put("table", getTableName())
-                .build()
-        );
+        messageProducer.sendMessage(new TableChangeMessage(oldRow.getString("ID"), System.nanoTime(), getTableName(), TableChangeMessageProducer.DB_ACTIONS.DELETE));
     }
 }

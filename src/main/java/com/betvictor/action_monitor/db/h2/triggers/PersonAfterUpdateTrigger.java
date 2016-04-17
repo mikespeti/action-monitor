@@ -1,9 +1,9 @@
 package com.betvictor.action_monitor.db.h2.triggers;
 
-import com.betvictor.action_monitor.utils.SpringContext;
 import com.betvictor.action_monitor.domain.Person;
+import com.betvictor.action_monitor.services.jms.TableChangeMessage;
 import com.betvictor.action_monitor.services.jms.TableChangeMessageProducer;
-import com.google.common.collect.ImmutableMap;
+import com.betvictor.action_monitor.utils.SpringContext;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,12 +23,6 @@ public class PersonAfterUpdateTrigger extends AbstractEntityTriggerAdapter {
             throw new SQLException("newRow result set was NULL at UPDATE action");
         }
 
-        messageProducer.sendMessage(ImmutableMap.<String, Object>builder()
-                .put("timestamp", System.nanoTime())
-                .put("action", TableChangeMessageProducer.DB_ACTIONS.UPDATE)
-                .put("id", newRow.getString("ID"))
-                .put("table", getTableName())
-                .build()
-        );
+        messageProducer.sendMessage(new TableChangeMessage(newRow.getString("ID"), System.nanoTime(), getTableName(), TableChangeMessageProducer.DB_ACTIONS.UPDATE));
     }
 }

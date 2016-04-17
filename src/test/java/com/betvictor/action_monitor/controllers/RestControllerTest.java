@@ -3,6 +3,8 @@ package com.betvictor.action_monitor.controllers;
 import com.betvictor.action_monitor.AbstractTest;
 import com.betvictor.action_monitor.domain.Person;
 import com.betvictor.action_monitor.services.PersonService;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,16 +54,16 @@ public class RestControllerTest extends AbstractTest {
                 .andExpect(content().string(""));
 
         // Adding one new Person, p1
-        personService.add(p1);
+        p1 = personService.add(p1);
         this.mockMvc.perform(get("/findAll"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Person{id=1, name='Peter'}"));
+                .andExpect(content().string(Joiner.on(",").join(Lists.newArrayList(p1))));
 
         // Adding another new Person, p2
-        personService.add(p2);
+        p2 = personService.add(p2);
         this.mockMvc.perform(get("/findAll"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Person{id=1, name='Peter'},Person{id=2, name='Andras'}"));
+                .andExpect(content().string(Joiner.on(",").join(Lists.newArrayList(p1, p2))));
 
         personService.deleteAll();
         this.mockMvc.perform(get("/findAll"))

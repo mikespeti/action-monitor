@@ -19,6 +19,7 @@ import org.springframework.jms.annotation.EnableJms;
 public class ActiveMonitorApplication {
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","com.betvictor.action_monitor.services.jms.TableChangeMessage");
         SpringApplication.run(ActiveMonitorApplication.class, args);
     }
 
