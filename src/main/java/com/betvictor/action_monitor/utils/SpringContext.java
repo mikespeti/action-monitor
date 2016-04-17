@@ -1,4 +1,4 @@
-package com.betvictor.action_monitor.database;
+package com.betvictor.action_monitor.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

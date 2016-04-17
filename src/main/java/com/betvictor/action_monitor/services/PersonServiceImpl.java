@@ -1,9 +1,9 @@
-package com.betvictor.action_monitor.services.impl;
+package com.betvictor.action_monitor.services;
 
 import com.betvictor.action_monitor.domain.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.betvictor.action_monitor.repositories.PersonRepository;
+import com.betvictor.action_monitor.repository.PersonRepository;
 import com.betvictor.action_monitor.services.PersonService;
 
 import javax.transaction.Transactional;
@@ -14,7 +14,7 @@ public class PersonServiceImpl implements PersonService {
     private PersonRepository personRepository;
 
     @Autowired
-    public void setProductRepository(PersonRepository personRepository) {
+    public void setPersonRepository(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
@@ -30,19 +30,19 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    public Person addPerson(Person entity) {
+    public Person add(Person entity) {
         return personRepository.save(entity);
     }
 
     @Override
     @Transactional
-    public Person updatePerson(Person entity) {
+    public Person update(Person entity) {
         return personRepository.save(entity);
     }
 
     @Override
     @Transactional
-    public void deletePerson(Person entity) {
+    public void delete(Person entity) {
         personRepository.delete(entity);
     }
 

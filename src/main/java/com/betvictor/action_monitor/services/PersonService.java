@@ -9,12 +9,11 @@ public interface PersonService {
 
     Iterable<Person> findAll();
 
-    Person addPerson(Person entity);
+    Person add(Person entity);
 
-    Person updatePerson(Person entity);
+    Person update(Person entity);
 
-    void deletePerson(Person entity);
+    void delete(Person entity);
 
-    @Transactional
     void deleteAll();
 }

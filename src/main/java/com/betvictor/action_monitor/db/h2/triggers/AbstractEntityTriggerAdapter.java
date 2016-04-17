@@ -1,4 +1,4 @@
-package com.betvictor.action_monitor.services.triggers.h2;
+package com.betvictor.action_monitor.db.h2.triggers;
 
 import com.betvictor.action_monitor.domain.Person;
 import org.apache.commons.lang3.StringUtils;

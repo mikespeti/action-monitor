@@ -45,7 +45,8 @@ public class TableChangeMessageProducer {
      *              [action - TableChangeMessageProducer.DB_ACTIONS]<br/>
      */
     public void sendMessage(Map<String, Object> nvMap) {
-        jmsTemplate.convertAndSend(TableChangeMessageConsumer.QUEUE_NAME, "timestamp=" + nvMap.get("timestamp") + " :: a row with ID=" + nvMap.get("id") + " " + nvMap.get("action") + " " + nvMap.get("table"));
+        jmsTemplate.convertAndSend(TableChangeMessageConsumer.QUEUE_NAME,
+                "timestamp=" + nvMap.get("timestamp") + " :: a row with ID=" + nvMap.get("id") + " " + nvMap.get("action") + " " + nvMap.get("table"));
     }
 
 

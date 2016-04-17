@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 
 
 public class PersonServiceTest extends AbstractTest {
@@ -24,7 +23,7 @@ public class PersonServiceTest extends AbstractTest {
     public void testAddPerson() {
         Person person = new Person("Peter");
 
-        person = personService.addPerson(person);
+        person = personService.add(person);
         Assert.assertNotNull(person.getId());
     }
 
@@ -32,12 +31,12 @@ public class PersonServiceTest extends AbstractTest {
     public void testUpdatePerson() {
         Person person = new Person("Peter");
 
-        person = personService.addPerson(person);
+        person = personService.add(person);
         Assert.assertNotNull(person.getId());
         Assert.assertEquals("Peter", person.getName());
 
         person.setName("Andras");
-        person = personService.updatePerson(person);
+        person = personService.update(person);
         Assert.assertEquals("Andras", person.getName());
     }
 
@@ -46,12 +45,12 @@ public class PersonServiceTest extends AbstractTest {
     public void testDeletePerson() {
         Person person = new Person("Peter");
 
-        person = personService.addPerson(person);
+        person = personService.add(person);
         Assert.assertNotNull(person.getId());
         Assert.assertEquals("Peter", person.getName());
 
         Long id = person.getId();
-        personService.deletePerson(person);
+        personService.delete(person);
 
         Assert.assertNull(personService.findById(id));
     }
@@ -62,9 +61,9 @@ public class PersonServiceTest extends AbstractTest {
         Person p2 = new Person("Andras");
         Person p3 = new Person("Akos");
 
-        personService.addPerson(p1);
-        personService.addPerson(p2);
-        personService.addPerson(p3);
+        personService.add(p1);
+        personService.add(p2);
+        personService.add(p3);
 
         Assert.assertEquals(3, Lists.newArrayList(personService.findAll()).size());
 

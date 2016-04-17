@@ -1,5 +1,8 @@
 package com.betvictor.action_monitor.domain;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
 import javax.persistence.*;
 
 @Entity(name = "T_PERSON")
@@ -39,26 +42,21 @@ public class Person {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        Person product = (Person) o;
-
-        if (!id.equals(product.id)) return false;
-        return name.equals(product.name);
-
+        Person person = (Person) o;
+        return Objects.equal(id, person.id) &&
+                Objects.equal(name, person.name);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + name.hashCode();
-        return result;
+        return Objects.hashCode(id, name);
     }
 
     @Override
     public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("name", name)
+                .toString();
     }
 }

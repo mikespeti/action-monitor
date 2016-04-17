@@ -32,30 +32,30 @@ public class PersonTriggerTest extends AbstractTest {
 
     @Test
     public void testAfterInsertTrigger() {
-        personService.addPerson(new Person("Peter"));
+        personService.add(new Person("Peter"));
         verify(messageProducer, times(1));
     }
 
     @Test
     public void testAfterUpdateTrigger() {
-        Person p=personService.addPerson(new Person("Peter"));
+        Person p=personService.add(new Person("Peter"));
         p.setName("Andras");
 
-        personService.updatePerson(p);
+        personService.update(p);
         verify(messageProducer, times(2));
     }
 
     @Test
     public void testAfterDeleteTrigger() {
-        Person p=personService.addPerson(new Person("Peter"));
-        personService.deletePerson(p);
+        Person p=personService.add(new Person("Peter"));
+        personService.delete(p);
         verify(messageProducer, times(2));
     }
     @Test
     public void testAfterDeleteTrigger_deleteAll() {
-        personService.addPerson(new Person("Peter"));
-        personService.addPerson(new Person("Andras"));
-        personService.addPerson(new Person("Akos"));
+        personService.add(new Person("Peter"));
+        personService.add(new Person("Andras"));
+        personService.add(new Person("Akos"));
         personService.deleteAll();
         verify(messageProducer, times(6));
     }
